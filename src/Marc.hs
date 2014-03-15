@@ -6,9 +6,16 @@ import Data.String.Utils
 import Data.List.Utils
 import Debug.Trace
 
+marc21FieldTerminator :: Char
 marc21FieldTerminator = '\x1e'
+
+marc21RecordTerminator :: String
 marc21RecordTerminator = "\x1d"
+
+marc21LeaderLength :: Int
 marc21LeaderLength = 24
+
+marc21DirectoryLength :: Int
 marc21DirectoryLength = 12
 
 type Marc21Leader = String
