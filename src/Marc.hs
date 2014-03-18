@@ -59,14 +59,13 @@ data Marc21Field = Marc21VariableField {
      , fRawData                :: String
 }
 instance Show Marc21Field where
-    show (Marc21VariableField fTag fIndicator1 fIndicator2 fSubfields fRawData) = fTag ++ " " ++ [fIndicator1] ++ " " ++ [fIndicator2] ++ "  " ++ (concatMap formatSubfield fSubfields)
-    show (Marc21ControlField fTag fRawData fValue) = fTag ++ " " ++ " " ++ fValue
+    show (Marc21VariableField t i1 i2 sfs _) = t ++ " " ++ [i1] ++ " " ++ [i2] ++ "  " ++ (concatMap formatSubfield sfs)
+    show (Marc21ControlField t _ val) = t ++ " " ++ " " ++ val
 
 formatSubfield :: Marc21Subfield -> String
 formatSubfield subfield =
   --"$" ++ [(sfCode (subfields !! 0))] ++ (sfValue (subfields !! 0)) --this works
   "$" ++ [(sfCode subfield)] ++ " " ++ (sfValue subfield) ++ " "
-
 data Marc21Record = Marc21Record {
       mrRawString                :: String,
       mrLeader                   :: Marc21Leader,
