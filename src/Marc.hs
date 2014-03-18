@@ -33,6 +33,7 @@ data Marc21Directory = Marc21Directory {
       mdEntries          :: [Marc21DirEntry]
 } deriving (Show)
 
+type Marc21TagCode = String
 type Marc21SubfieldCode = Char
 type Marc21SubfieldValue = String
 
@@ -193,15 +194,15 @@ getField :: Marc21Record -> Marc21Tag -> Maybe Marc21Field
 getField record tag  =
   find (\field -> fTag field == tag) (mrFields record)
 
+getSubfield :: Marc21Field -> Marc21SubfieldCode -> Maybe Marc21Subfield
+getSubfield t sf =
+  find (\subfield -> sfCode subfield  == sf) (fSubfields t)
 
-getFieldAndSubfield :: Marc21Record -> Marc21Tag -> Marc21SubfieldCode -> Maybe Marc21SubfieldValue
-getFieldAndSubfield record tag subfieldcode =
-  case find (\field -> fTag field == tag) (mrFields record)
-       of Nothing -> Nothing
-          Just f -> case find (\sf -> sfCode sf == subfieldcode) (fSubfields f)
-                    of Nothing -> Nothing
-                       Just sf -> Just (sfValue sf)
-
+getFieldAndSubfield :: Marc21Record -> Marc21TagCode -> Marc21SubfieldCode -> Maybe Marc21SubfieldValue
+getFieldAndSubfield record tag subfieldcode = do
+  field <- getField record tag
+  subfield <- getSubfield field subfieldcode
+  return $ sfValue subfield
 
 hasField :: Marc21Record -> Marc21Tag -> Bool
 hasField record tag =  tag `elem` (map fTag (mrFields record))

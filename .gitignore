@@ -1,4 +1,7 @@
 .cabal-sandbox
+.dist-buildwrapper
+.project
+TAGS
 cabal.sandbox.config
 dist
 *.swp

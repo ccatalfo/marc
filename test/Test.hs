@@ -28,10 +28,14 @@ testNumberOfControlFields :: MarcFileResource -> Assertion
 testNumberOfControlFields (MarcFileResource marcString) =
                           let record = readFromString marcString
                           in assertEqual "it should have correct number of control fields" 4 (length $ getControlFields record)
+
 testNumberOfVariableFields :: MarcFileResource -> Assertion
 testNumberOfVariableFields (MarcFileResource marcString) =
                           let record = readFromString marcString in assertEqual "it should have correct number of variable fields" 16 (length $ getVariableFields record)
 
+testGetFieldAndSubfield :: MarcFileResource -> Assertion
+testGetFieldAndSubfield (MarcFileResource marcString) =
+                          let record = readFromString marcString in assertEqual "it should find 245$a" (Just "3DMove") $ (getFieldAndSubfield record "245" 'a')
 main :: IO ()
 main = defaultMain $
      withResource acquire release tests
@@ -43,6 +47,6 @@ tests resource = testGroup "All Tests"
                            [ testCase "Correct number of fields found" $ resource >>= testNumberOfFields
                              ,testCase "Correct number of control fields found" $ resource >>= testNumberOfControlFields
                              ,testCase "Correct number of control fields found" $ resource >>= testNumberOfVariableFields
-
+                             ,testCase "Correct title found" $ resource >>= testGetFieldAndSubfield
                             ]
-                     ]
+                      ]
