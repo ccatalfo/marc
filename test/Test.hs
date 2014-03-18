@@ -28,7 +28,9 @@ testNumberOfControlFields :: MarcFileResource -> Assertion
 testNumberOfControlFields (MarcFileResource marcString) =
                           let record = readFromString marcString
                           in assertEqual "it should have correct number of control fields" 4 (length $ getControlFields record)
-
+testNumberOfVariableFields :: MarcFileResource -> Assertion
+testNumberOfVariableFields (MarcFileResource marcString) =
+                          let record = readFromString marcString in assertEqual "it should have correct number of variable fields" 16 (length $ getVariableFields record)
 
 main :: IO ()
 main = defaultMain $
@@ -40,6 +42,7 @@ tests resource = testGroup "All Tests"
                      testGroup "Unit Tests"
                            [ testCase "Correct number of fields found" $ resource >>= testNumberOfFields
                              ,testCase "Correct number of control fields found" $ resource >>= testNumberOfControlFields
+                             ,testCase "Correct number of control fields found" $ resource >>= testNumberOfVariableFields
 
                             ]
                      ]
