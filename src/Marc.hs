@@ -102,8 +102,7 @@ readBatchFromString s =
     (map readFromString records, numread)
 
 printMarc21Record :: Marc21Record -> String
-printMarc21Record r =
-    show r
+printMarc21Record = show
 
 readAndPrint :: String -> String
 readAndPrint s =
