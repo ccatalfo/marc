@@ -110,12 +110,13 @@ readAndPrint s =
     show (readFromString s)
 
 
-printInMarcDumpFormat :: Marc21Record -> IO ()
-printInMarcDumpFormat record = do
-    putStrLn ("LDR  " ++ (mrLeader record))
-    mapM_ print (getControlFields record)
-    mapM_ print (getVariableFields record)
-    putStrLn " "
+marcDumpFormat :: Marc21Record -> String
+marcDumpFormat record =
+    leader ++ "\n" ++ controlFields ++ "\n" ++ variableFields ++ "\n"
+    where
+      leader = "LDR  " ++ mrLeader record
+      controlFields = intercalate "\n" $  map show $ getControlFields record
+      variableFields = intercalate "\n" $ map show $ getVariableFields record
 
 {-
     A directory entry in MARC 21 is made up of a tag, length-of-field, and field starting position. The directory begins in character position 24 of the record and ends with a field terminator. It is of variable length and consists of a series of fixed fields, referred to as "entries." One entry is associated with each variable field (control or data) present in the record. Each directory entry is 12 characters in length; the structure of each entry as defined in MARC 21 is represented schematically below. The numbers indicate the character positions occupied by the parts of the entry.

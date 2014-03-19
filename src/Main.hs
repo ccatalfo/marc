@@ -3,4 +3,4 @@ import Marc
 
 main :: IO ()
 main =
-  interact readAndPrint
+  interact $ marcDumpFormat . readFromString
