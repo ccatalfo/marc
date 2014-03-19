@@ -74,6 +74,7 @@ data Marc21Record = Marc21Record {
       mrFields                   :: [Marc21Field]
     } deriving (Show)
 
+
 getControlFields :: Marc21Record -> [Marc21Field]
 getControlFields record =
     filter (\field -> startswith "00" (fTag field)) (mrFields record)
@@ -93,14 +94,12 @@ readFromString s =
         directory = extractDirectory ((split [marc21FieldTerminator] s) !! 0)
         fields = extractFields s baseaddress directory
 
-readBatchFromString :: String -> ([Marc21Record], Int)
+readBatchFromString :: String -> [Marc21Record]
 readBatchFromString s =
     -- ignore last empty element from split
     let
-        records = (init $ split marc21RecordTerminator s)
-        numread = length records
-    in
-    (map readFromString records, numread)
+        records = (init $ split marc21RecordTerminator s) in
+    map readFromString records
 
 printMarc21Record :: Marc21Record -> String
 printMarc21Record = show
