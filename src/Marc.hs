@@ -129,7 +129,7 @@ extractDirectory :: String -> Marc21Directory
 extractDirectory s =
     Marc21Directory entries
         where
-          rawEntries = in_parts (drop 24 s) marc21DirectoryLength
+          rawEntries = inParts (drop 24 s) marc21DirectoryLength
           entries = map extractDirEntry rawEntries
 
 extractDirEntry :: String -> Marc21DirEntry
@@ -141,13 +141,19 @@ extractDirEntry s =
           lenOfField = read (parts !! 1) :: Int
           startPos = read (parts !! 2) :: Int
 
+splitAtMb :: Int -> [a] -> Maybe ([a],[a])
+splitAtMb n [] = Nothing
+splitAtMb n l = Just $ splitAt n l
+
+{- splitAtMb :: Int -> [a] -> Maybe (a)
 splitAtMb n l =
     let p = splitAt n l
     in if null $ fst p
        then Nothing
        else Just p
-
-in_parts l n =
+-}
+inParts :: [Char] -> Int -> [[Char]]
+inParts l n =
     unfoldr (splitAtMb n)
                 (l ++ replicate (length l `mod` n) ' ')
 
