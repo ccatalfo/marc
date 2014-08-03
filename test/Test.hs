@@ -12,7 +12,7 @@ data MarcFileResource = MarcFileResource String
 
 acquire :: IO MarcFileResource
 acquire = do
-        file <- getDataFileName "data/record.mrc"
+        file <- getDataFileName "test/data/record.mrc"
         s <- readFile file
         return $ MarcFileResource s
 
