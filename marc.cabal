@@ -44,7 +44,7 @@ executable test-marc
   ghc-options:          -Wall
   main-is:              Test.hs
   default-language:     Haskell2010
-  data-files:           data/record.mrc
+  --data-files:           data/record.mrc
   build-depends:        filepath >= 1.3.0.1,
                         base
                         , marc
