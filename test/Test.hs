@@ -7,13 +7,11 @@ import System.FilePath.Posix
 import System.Environment
 import Paths_marc
 
-
 data MarcFileResource = MarcFileResource String
 
 acquire :: IO MarcFileResource
 acquire = do
-        file <- getDataFileName "test/data/record.mrc"
-        s <- readFile file
+        s <- readFile "test/data/record.mrc"
         return $ MarcFileResource s
 
 release :: MarcFileResource -> IO ()
