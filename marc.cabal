@@ -4,7 +4,7 @@
 name:                   marc
 version:                0.1.0.0
 synopsis:               Parse MARC bibliographic files.
--- description:
+description:            Allows parsing of MARC bibliographic data format (https://www.loc.gov/marc/).
 homepage:               http://github.com/ccatalfo/marc
 license:                MIT
 license-file:           LICENSE
