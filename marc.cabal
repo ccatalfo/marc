@@ -2,7 +2,7 @@
 -- see http://haskell.org/cabal/users-guide/
 
 name:                   marc
-version:                0.1.0.0
+version:                0.1.0
 synopsis:               Parse MARC bibliographic files.
 description:            Allows parsing of MARC bibliographic data format (https://www.loc.gov/marc/).
 homepage:               http://github.com/ccatalfo/marc
@@ -22,7 +22,7 @@ executable marcdump
   -- other-extensions:
   build-depends:        filepath >= 1.3.0.1,
                         parallel,
-                        base
+                        base >=4.5 && < 4.10
                         , MissingH
   hs-source-dirs:       src
   ghc-options:          -Wall
@@ -33,7 +33,7 @@ library
   -- other-modules:
   -- other-extensions:
   build-depends:        filepath >= 1.3.0.1,
-                        base
+                        base >=4.5 && < 4.10
                         , MissingH
   ghc-options:          -Wall
   hs-source-dirs:       src
@@ -46,7 +46,7 @@ test-suite Tests
   main-is:              Test.hs
   default-language:     Haskell2010
   build-depends:        filepath >= 1.3.0.1,
-                        base
+                        base >=4.5 && < 4.10 
                         , marc
                         , HUnit
                         , QuickCheck
