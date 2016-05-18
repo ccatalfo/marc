@@ -41,7 +41,7 @@ testGetFieldAndSubfield (MarcFileResource marcString) =
 
 testHasfield :: MarcFileResource -> Assertion
 testHasfield (MarcFileResource marcString) =
-  let record = readFromString marcString in assertBool "hasField should be true" (hasField record "245" == True)
+  let record = readFromString marcString in assertBool "hasField should be true" (hasField record "245")
 
 testGetField :: MarcFileResource -> Assertion
 testGetField (MarcFileResource marcString) =
