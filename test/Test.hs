@@ -9,9 +9,14 @@ import Paths_marc
 
 data MarcFileResource = MarcFileResource String
 
-acquire :: IO MarcFileResource
-acquire = do
+acquireSingleRecordFile :: IO MarcFileResource
+acquireSingleRecordFile = do
         s <- readFile "test/data/record.mrc"
+        return $ MarcFileResource s
+
+acquireMultipleRecordsFile :: IO MarcFileResource
+acquireMultipleRecordsFile = do
+        s <- readFile "test/data/records303.mrc"
         return $ MarcFileResource s
 
 release :: MarcFileResource -> IO ()
@@ -34,9 +39,16 @@ testNumberOfVariableFields (MarcFileResource marcString) =
 testGetFieldAndSubfield :: MarcFileResource -> Assertion
 testGetFieldAndSubfield (MarcFileResource marcString) =
                           let record = readFromString marcString in assertEqual "it should find 245$a" (Just "3DMove") $ (getFieldAndSubfield record "245" 'a')
+
+testNumberOfRecords :: MarcFileResource -> Assertion
+testNumberOfRecords (MarcFileResource marcString) =
+    let records = readBatchFromString marcString in assertEqual "it should have 303 records" 303 $ (length records)
+
+tests :: TestTree
+tests = testGroup "Tests" [withResource acquireSingleRecordFile release singleRecordTests, withResource acquireMultipleRecordsFile release multipleRecordTests]
+
 main :: IO ()
-main = defaultMain $
-     withResource acquire release singleRecordTests
+main = defaultMain $ tests
 
 singleRecordTests :: IO MarcFileResource -> TestTree
 singleRecordTests resource = testGroup "Single Record Tests"
@@ -48,3 +60,12 @@ singleRecordTests resource = testGroup "Single Record Tests"
                              ,testCase "Correct title found" $ resource >>= testGetFieldAndSubfield
                             ]
                       ]
+
+multipleRecordTests :: IO MarcFileResource -> TestTree
+multipleRecordTests resource = testGroup "Multiple Record Tests"
+  [
+    testGroup "Unit Tests"
+      [
+      testCase "Correct number of records found" $ resource >>= testNumberOfRecords
+      ]
+  ]
