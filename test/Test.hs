@@ -40,6 +40,10 @@ testGetFieldAndSubfield :: MarcFileResource -> Assertion
 testGetFieldAndSubfield (MarcFileResource marcString) =
                           let record = readFromString marcString in assertEqual "it should find 245$a" (Just "3DMove") $ (getFieldAndSubfield record "245" 'a')
 
+testHasfield :: MarcFileResource -> Assertion
+testHasfield (MarcFileResource marcString) =
+  let record = readFromString marcString in assertBool "hasField should be true" (hasField record "245" == True)
+
 testNumberOfRecords :: MarcFileResource -> Assertion
 testNumberOfRecords (MarcFileResource marcString) =
     let records = readBatchFromString marcString in assertEqual "it should have 303 records" 303 $ (length records)
@@ -58,6 +62,7 @@ singleRecordTests resource = testGroup "Single Record Tests"
                              ,testCase "Correct number of control fields found" $ resource >>= testNumberOfControlFields
                              ,testCase "Correct number of control fields found" $ resource >>= testNumberOfVariableFields
                              ,testCase "Correct title found" $ resource >>= testGetFieldAndSubfield
+                             ,testCase "hasField returns true" $ resource >>= testHasfield
                             ]
                       ]
 
