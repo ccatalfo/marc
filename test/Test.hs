@@ -5,7 +5,6 @@ import Test.Tasty.HUnit
 import Marc
 import System.FilePath.Posix
 import System.Environment
-import Paths_marc
 
 data MarcFileResource = MarcFileResource String
 
