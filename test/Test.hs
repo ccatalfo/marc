@@ -36,10 +36,10 @@ testGetFieldAndSubfield (MarcFileResource marcString) =
                           let record = readFromString marcString in assertEqual "it should find 245$a" (Just "3DMove") $ (getFieldAndSubfield record "245" 'a')
 main :: IO ()
 main = defaultMain $
-     withResource acquire release tests
+     withResource acquire release singleRecordTests
 
-tests :: IO MarcFileResource -> TestTree
-tests resource = testGroup "All Tests"
+singleRecordTests :: IO MarcFileResource -> TestTree
+singleRecordTests resource = testGroup "Single Record Tests"
                      [
                      testGroup "Unit Tests"
                            [ testCase "Correct number of fields found" $ resource >>= testNumberOfFields
