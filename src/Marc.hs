@@ -44,7 +44,7 @@ type Marc21SubfieldValue = String
 data Marc21Subfield = Marc21Subfield {
       sfCode                   :: Marc21SubfieldCode,
       sfValue                  :: Marc21SubfieldValue
-}
+} deriving Eq
 instance Show Marc21Subfield where
     show (Marc21Subfield sfCode sfValue) = "$" ++ [sfCode] ++ sfValue ++ " "
 
@@ -59,15 +59,14 @@ data Marc21Field = Marc21VariableField {
       fIndicator1              :: Marc21Indicator,
       fIndicator2              :: Marc21Indicator,
       fSubfields               :: [Marc21Subfield]
-    ,fRawData                  :: String
 } | Marc21ControlField {
      fTag                      :: Marc21Tag
      ,fValue                    :: String
-     , fRawData                :: String
-}
+} deriving Eq
+
 instance Show Marc21Field where
-    show (Marc21VariableField t i1 i2 sfs _) = t ++ " " ++ [i1] ++ " " ++ [i2] ++ "  " ++ (concatMap formatSubfield sfs)
-    show (Marc21ControlField t _ val) = t ++ " " ++ " " ++ val
+    show (Marc21VariableField t i1 i2 sfs) = t ++ " " ++ [i1] ++ " " ++ [i2] ++ "  " ++ (concatMap formatSubfield sfs)
+    show (Marc21ControlField t val) = t ++ " " ++ " " ++ val
 
 -- |Returns a formatted MARC21 subfield.
 -- e.g. $a 7
@@ -188,7 +187,7 @@ extractVariableField s baseaddress entry =
         indicator2 = rawField !! 1
         subfields = extractSubFields rawField
     in
-      Marc21VariableField (mdTag entry) indicator1 indicator2 subfields rawField
+      Marc21VariableField (mdTag entry) indicator1 indicator2 subfields
 
 extractControlField :: String -> Marc21BaseAddressOfData -> Marc21DirEntry -> Marc21Field
 extractControlField s baseaddress entry =
@@ -197,7 +196,7 @@ extractControlField s baseaddress entry =
         startingPosition = baseaddress + mdStartPosition entry
         rawField = drop 1 (take (len-1) (drop startingPosition s))
     in
-      Marc21ControlField (mdTag entry) (drop 1 (init rawField)) rawField
+      Marc21ControlField (mdTag entry) (drop 1 (init rawField))
 
 extractSubFields :: String -> [Marc21Subfield]
 extractSubFields s =

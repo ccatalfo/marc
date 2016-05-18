@@ -44,6 +44,14 @@ testHasfield :: MarcFileResource -> Assertion
 testHasfield (MarcFileResource marcString) =
   let record = readFromString marcString in assertBool "hasField should be true" (hasField record "245" == True)
 
+testGetField :: MarcFileResource -> Assertion
+testGetField (MarcFileResource marcString) =
+  let
+    titleField = Marc.Marc21VariableField "245" '0' '0' [Marc.Marc21Subfield 'a' "3DMove",Marc.Marc21Subfield 'h' "[electronic resource]."]
+    record = readFromString marcString
+    field = getField record "245"
+  in assertEqual "getField returns correctly" (Just titleField) $ field
+
 testNumberOfRecords :: MarcFileResource -> Assertion
 testNumberOfRecords (MarcFileResource marcString) =
     let records = readBatchFromString marcString in assertEqual "it should have 303 records" 303 $ (length records)
@@ -63,6 +71,7 @@ singleRecordTests resource = testGroup "Single Record Tests"
                              ,testCase "Correct number of control fields found" $ resource >>= testNumberOfVariableFields
                              ,testCase "Correct title found" $ resource >>= testGetFieldAndSubfield
                              ,testCase "hasField returns true" $ resource >>= testHasfield
+                             ,testCase "getField returns correct data" $ resource >>= testGetField
                             ]
                       ]
 
