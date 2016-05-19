@@ -1,4 +1,23 @@
 module Marc
+  (
+   readBatchFromString,
+   readFile,
+   readFromString,
+   marcDumpFormat,
+  hasField,
+  getField,
+  getFieldAndSubfield,
+  getSubfield,
+  getFields,
+  getControlFields,
+  getVariableFields,
+  mkMarc21VariableField,
+  mkMarc21ControlField,
+  mkMarc21Indicator,
+  mkMarc21Subfield,
+  mkMarc21SubfieldCode,
+  mkMarc21SubfieldValue
+  )
     where
 
 import Data.List
@@ -37,8 +56,16 @@ data Marc21Directory = Marc21Directory {
 } deriving (Show)
 
 type Marc21TagCode = String
+mkMarc21TagCode :: String -> Marc21TagCode
+mkMarc21TagCode s = s
+
 type Marc21SubfieldCode = Char
+mkMarc21SubfieldCode :: Char -> Marc21SubfieldCode
+mkMarc21SubfieldCode s = s
+
 type Marc21SubfieldValue = String
+mkMarc21SubfieldValue :: String -> Marc21SubfieldValue
+mkMarc21SubfieldValue s = s
 
 -- |Represents a MARC21 subfield (see: https://www.loc.gov/marc/bibliographic/bdsummary.html)
 data Marc21Subfield = Marc21Subfield {
@@ -48,9 +75,16 @@ data Marc21Subfield = Marc21Subfield {
 instance Show Marc21Subfield where
     show (Marc21Subfield sfCode sfValue) = "$" ++ [sfCode] ++ sfValue ++ " "
 
+mkMarc21Subfield :: Marc21SubfieldCode -> Marc21SubfieldValue -> Marc21Subfield
+mkMarc21Subfield = Marc21Subfield
 
 type Marc21Tag = String
+mkMarc21Tag :: String -> Marc21Tag
+mkMarc21Tag s = s
+
 type Marc21Indicator = Char
+mkMarc21Indicator :: Char -> Marc21Indicator
+mkMarc21Indicator s = s
 
 -- |Represents a MARC21 Field (see: https://www.loc.gov/marc/bibliographic/bdsummary.html)
 -- Can be either a variable field or a control field.
@@ -68,6 +102,11 @@ instance Show Marc21Field where
     show (Marc21VariableField t i1 i2 sfs) = t ++ " " ++ [i1] ++ " " ++ [i2] ++ "  " ++ (concatMap formatSubfield sfs)
     show (Marc21ControlField t val) = t ++ " " ++ " " ++ val
 
+mkMarc21VariableField :: Marc21Tag -> Marc21Indicator -> Marc21Indicator -> [Marc21Subfield]-> Marc21Field
+mkMarc21VariableField = Marc21VariableField
+  
+mkMarc21ControlField :: Marc21Tag -> String -> Marc21Field
+mkMarc21ControlField = Marc21ControlField
 -- |Returns a formatted MARC21 subfield.
 -- e.g. $a 7
 formatSubfield :: Marc21Subfield -> String
@@ -82,6 +121,9 @@ data Marc21Record = Marc21Record {
       mrDirectory                :: Marc21Directory,
       mrFields                   :: [Marc21Field]
     } deriving (Show)
+
+getFields :: Marc21Record -> [Marc21Field]
+getFields = mrFields
 
 -- |Returns only Marc21ControlField from the Marc21Record.
 getControlFields :: Marc21Record -> [Marc21Field]

@@ -24,7 +24,7 @@ release resource = return ()
 testNumberOfFields :: MarcFileResource -> Assertion
 testNumberOfFields (MarcFileResource marcString) =
                        let record = readFromString marcString in
-                    assertEqual "should have correct number of fields" 20 (length $ mrFields record)
+                    assertEqual "should have correct number of fields" 20 (length $ getFields record)
 
 testNumberOfControlFields :: MarcFileResource -> Assertion
 testNumberOfControlFields (MarcFileResource marcString) =
@@ -46,7 +46,8 @@ testHasfield (MarcFileResource marcString) =
 testGetField :: MarcFileResource -> Assertion
 testGetField (MarcFileResource marcString) =
   let
-    titleField = Marc.Marc21VariableField "245" '0' '0' [Marc.Marc21Subfield 'a' "3DMove",Marc.Marc21Subfield 'h' "[electronic resource]."]
+    subfields = [mkMarc21Subfield (mkMarc21SubfieldCode 'a') (mkMarc21SubfieldValue "3DMove"),mkMarc21Subfield (mkMarc21SubfieldCode 'h') (mkMarc21SubfieldValue "[electronic resource].")]
+    titleField = mkMarc21VariableField "245" '0' '0' subfields
     record = readFromString marcString
     field = getField record "245"
   in assertEqual "getField returns correctly" (Just titleField) $ field
