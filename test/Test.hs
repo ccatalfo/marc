@@ -72,6 +72,7 @@ singleRecordTests resource = testGroup "Single Record Tests"
                              ,testCase "Correct title found" $ resource >>= testGetFieldAndSubfield
                              ,testCase "hasField returns true" $ resource >>= testHasfield
                              ,testCase "getField returns correct data" $ resource >>= testGetField
+                             ,testCase "getField returns correct data" $ resource >>= testGetField
                             ]
                       ]
 
