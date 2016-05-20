@@ -8,3 +8,4 @@ dist
 *~
 .ghci
 .stack-work
+ideaHaskellLib
