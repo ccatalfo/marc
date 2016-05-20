@@ -4,6 +4,7 @@ import Marc
 import Data.List
 import System.Environment
 import Options.Applicative
+import Data.Monoid
 
 data MarcDumpOptions = MarcDumpOptions
   {
