@@ -4,7 +4,6 @@ import Marc
 import Data.List
 import System.Environment
 import Options.Applicative
-import Data.Monoid
 
 data MarcDumpOptions = MarcDumpOptions
   {
@@ -26,4 +25,7 @@ main = execParser opts >>= runWithOptions
      <*> switch (short 'p' <>
                 long "print" <>
                 help "print numbers")
-    opts = info parser mempty
+    opts = info parser (
+      fullDesc
+      <> progDesc "MARCDUMP utility"
+      <> header "MARCDUmp")
